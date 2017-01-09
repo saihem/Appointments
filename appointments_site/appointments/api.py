@@ -29,7 +29,8 @@ class AppointmentsListResource(object):
 		print "END OF APP STUFF" ,len(appointments)
 		return appointments 
 	
-	def get_matching_appointments(self, query):
-		query = query.strip()
+	def get_matching_appointments(self, query_dict):
+		query = query_dict['keyword'].strip()
 		results = Appointment.objects.filter(Q(date__icontains=query)| Q(time__icontains=query)| Q(description__icontains=query))
-		return list(results)
+		print "check results"* 5, results
+		return list(results), results.count()

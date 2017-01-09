@@ -1,0 +1,27 @@
+<p class="head-level-1"><span>Appointments</span></p>
+<div class="row count-row-even">
+
+    <table class="table  " style="margin-bottom: 100px !important;">
+        <thead class="info">
+            <tr>
+            <th class="align-center span2">#</th>
+            <th  class="align-center" >Date</th>
+            <th  class="align-center">Time</th>
+            <th  class="align-center">Description</th>
+          </tr>
+        </thead>
+        <tbody style="font-size: 16px;font-weight: 200;">
+
+            {% for appointment in appointments %}
+                <tr class="{% cycle 'row1' 'row-odd' %}">
+                    <td  class="align-center span2">{{ forloop.counter }}</td>
+                    <td  class="align-center"> {{ appointment.date }}</td>
+                    <td  class="align-center">{{ appointment.time }}</td>
+                    <td class="align-center">{{ appointment.description }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
