@@ -1,12 +1,10 @@
 from django.conf.urls import include, url
+from appointments.views import AppointmentsView
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
 
 urlpatterns = [
     # Examples:
-    # url(r'^$', 'appointments_site.views.home', name='home'),
+    url(r'^$', AppointmentsView.as_view(), name='home'),
     # url(r'^appointments_site/', include('appointments_site.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

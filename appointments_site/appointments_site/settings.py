@@ -1,10 +1,14 @@
 # Django settings for appointments_site project.
+import os 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+Temp_Path = os.path.realpath('.')
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    'saihemchandra9@gmail.com',
 )
 
 MANAGERS = ADMINS
@@ -107,12 +111,21 @@ ROOT_URLCONF = 'appointments_site.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'appointments_site.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+TEMPLATES = [
+{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(BASE_DIR, 'appointments/templates')],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
 
+        ],
+    },
+},] 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
