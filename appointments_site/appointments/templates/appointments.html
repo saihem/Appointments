@@ -93,16 +93,16 @@
 
 
     </div> <!-- /container -->
-  <script>
+  <script type="text/javascript">
    $("#keyword").change(function () {
      //var keyword = $(this).val();
      var form = $(this).closest("form");
      $.ajax({
        url: location.pathname,
        data: form.serialize(),
-       dataType: 'json',
+       //dataType: 'json',
        success: function (data) {
-          $("#search_results").html(data).show();
+          $("#search_results").html(data);
        },
        error: function(data) {
            $("#MESSAGE-DIV").html("Something went wrong!");
