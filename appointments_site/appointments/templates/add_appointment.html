@@ -1,9 +1,10 @@
 
        <form class="form-horizontal" method="post" name="add_appointment" action="{% url 'add' %}">
                 {% csrf_token %}
+                 <button id="add-app" type="submit" class="btn btn-lg btn-primary">ADD</button>
+		        <button id="cancel-app" type="button" class="btn btn-lg btn-secondary">Cancel</button>
+		        </br>
                 <p class="">* Denotes Required Field</p>
-                <input type="hidden" id="tags" value="tag1,tag2" style="width: 400px;">
-
                 {% for field in add_form %}
                     <div class="control-group">
                         <label class="control-label ">{{ field.label }} </label>
@@ -12,14 +13,18 @@
                             {% if field.errors %}
                                 <div class="" style="margin: 10px auto;">
                                     {{ field.errors }}
+                                    <div class="alert alert-danger" role="alert">
+								        <strong>Oh snap!</strong> Change a few things up and try submitting again.
+								      </div>
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                 {% endfor %}
-                <div style="clear: both;"></div>
-
-                <div class="form-actions">
-                    <button class="" name="add" type="submit" id="contact_link">Add Appointment</button>
-                </div>
         </form>
+        {{request.GET}}
+         {% if request.GET.success %}
+	        <div class="alert alert-success" role="alert">
+	        <strong>Well done!</strong> You successfully read this important alert message.
+	      	</div>
+      	{% endif %}

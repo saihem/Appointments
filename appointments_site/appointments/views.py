@@ -60,6 +60,7 @@ class AppointmentsView(FormView):
         def form_valid(self, form):
             app_date = form.cleaned_data['date']
             AppointmentsInstanceResource()._post(form.cleaned_data)
+            print "SUCESSS"
             return HttpResponseRedirect('%s?success=1'% reverse('home'))
 
 
@@ -68,23 +69,9 @@ class AppointmentsSearchView(FormView):
 	form_class = AppointmentSearchForm
 	success_url = '/'
 
-	# def get_form_kwargs(self):
- #            """
- #            Returns the keyword arguments for instantiating the form.
- #            """
- #            kwargs = {'initial': self.get_initial()}
- #            print self.request.GET, self.request.POST
- #            print kwargs, "kwargs"
- #            if self.request.method in ('GET', 'PUT'):
- #                kwargs.update({
- #                    'data': self.request.GET,
- #                    'files': self.request.FILES,
- #                })
- #            return kwargs
-
 	def get(self, *args, **kwargs):
+	    print "AJAX", self.request.is_ajax()
             form = self.form_class(self.request.POST)
-            print "FORM", form, self.form_valid(), self.form.cleaned_data
             if form.is_valid():
                 return self.form_valid(form)
             else:
@@ -100,7 +87,7 @@ class AppointmentsSearchView(FormView):
 
         def form_valid(self, form):
             self.query_params = form.cleaned_data
-            print "self", self.query_params
+            print "self", self.query_params, self.request.is_ajax()
             if self.query_params.get('keyword') != u'':
                 self.appointments, self.count = AppointmentsListResource().get_matching_appointments(self.query_params)
             else:

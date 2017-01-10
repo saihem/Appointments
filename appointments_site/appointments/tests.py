@@ -11,7 +11,6 @@ import datetime
 class AppointmentsTest(TestCase):
 	fixtures = ['initial_data.json']
 	client = Client()
-
 	response = client.get(reverse('home'))
 	response.status_code
     response = client.get(reverse('search'))
