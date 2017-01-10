@@ -1,4 +1,7 @@
 # Appointments
+A Simple Appointments App
+
+To Run this App please follow the following steps
 
 1. $virtualenv env
 2. $source env/bin/acvtivate
