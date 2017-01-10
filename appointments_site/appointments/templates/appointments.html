@@ -8,10 +8,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
     <title>Appointments</title>
-
     <!-- Bootstrap core CSS -->
     <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
@@ -20,24 +18,18 @@
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="theme.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <link href="{% static "css/style.css" %}"> rel="stylesheet">
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="{{STATIC_URL}}js/main.js"></script>
-    <script type="text/javascript"> 
+    <!-- <script type="text/javascript" src="{% static "js/main.js" %}">></script> -->
+    <script type="text/javascript">
     $(document).ready(function() {
       $("#add_appointment").hide();
       $("#new-app").click(function () {
@@ -52,23 +44,6 @@
       });
     </script>
 
-   <!--  <script type="text/javascript">
-        var form = $(search_form);
-        form.submit(function () {
-            $.ajax({
-                type: form.attr('method'),
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function (data) {
-                    $("#search_results").html(data).show();
-                },
-                error: function(data) {
-                    $("#MESSAGE-DIV").html("Something went wrong!");
-                }
-            });
-            return false;
-        });
-    </script> -->
   </head>
 
   <body>
@@ -94,54 +69,88 @@
       <div id="add_appointment">
         {% include 'add_appointment.html' %}
       </div>
-         {% if request.GET.success %}
-          <div class="alert alert-success" role="alert">
-          <strong>Great!</strong> You Created an appointment!
-          </div>
-        {% endif %}
+           {% if request.GET.success %}
+            <div class="alert alert-success" role="alert">
+            <strong>Great!</strong> You Created an appointment!
+            </div>
+          {% endif %}
    </div>
 
-    <form id="search" class="dynamic-form"  name="search" action="{% url 'search' %}" method="post">
-    {% csrf_token %}      
-                    <div class="controls">
-                    <span id="browse-ul" class="input-eg">
-                        <!-- id="keyword" -->
-                        {{ search_form.keyword }}
-                    </span>
-                            <button class="btn btn-lg btn-info"" type="submit" > Search</button>
-                    </div>
-              
+    <form id="search_form" name="search_form" method="post">
+              {% csrf_token %}
+                <div class="controls">
+                <span id="browse-ul" class="input-eg">
+                    <!-- id="keyword" -->
+                    {{ search_form.keyword }}
+                </span>
+                    <input class="btn btn-lg btn-info keyword" type="submit" value="Search"/>
+                </div>
+
                     <!-- <input type="submit" value="Search">     -->
       </form>
-      <div id="search_results">
-        {% include 'search_results.html' %}
-      </div>   
+        <div id="search_results">
 
-    
-        <!--  div class="page-header">
-        <h1>Wells</h1>
-      </div>
-        <div class="well">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
-      </div> -->
+        </div>
+
+        <div id="MESSAGE-DIV" class="alert-danger"></div>
 
 
     </div> <!-- /container -->
-    <script>
-      console.log("its working");
-      $(document).on('submit', '.dynamic-form', function(form) {
-        var $form = $(form);
-        console.log("its working inside");
-        $.ajax({
-          type: form.method,
-          url: form.action,
-          data: $form.serialize(),
-          success: function(data) {
-            $form.replace(data);
-          }
-        });
-      });
-</script>
+  <script>
+   $("#keyword").change(function () {
+     //var keyword = $(this).val();
+     var form = $(this).closest("form");
+     $.ajax({
+       url: location.pathname,
+       data: form.serialize(),
+       dataType: 'json',
+       type: 'post',
+       success: function (data) {
+          $("#search_results").html(data).show();
+       },
+       error: function(data) {
+           $("#MESSAGE-DIV").html("Something went wrong!");
+       }
+     });
+
+   });
+ </script>
+    <!-- <script type="text/javascript">
+          $("#keyword").change(function () {
+           console.log("KEYWORDD "+$(this).val() );
+         });
+         var form = $(search_form);
+         form.submit(function () {
+           console.log("its working inside"+ form.serialize);
+             $.ajax({
+                 type: form.attr('method'),
+                 url: '{% url "search" %}',
+                 data: form.serialize(),
+                 success: function (response) {
+                     $("#search_results").html(response).show();
+                 },
+                 error: function(response) {
+                     $("#MESSAGE-DIV").html("Something went wrong!");
+                 }
+             });
+             return false;
+         });
+        $('#search_form').on('submit', '.keyword', function(event) {
+          event.preventDefault();
+          $.ajax({
+                   type: $(this).attr('method'),
+                   url:  $(this).attr('action'),
+                   data:  $(this).serialize(),
+                   success: function (response) {
+                       $("#search_results").html(response);
+                   },
+                   error: function(response) {
+                       $("#MESSAGE-DIV").html("Something went wrong!");
+                   }
+               });
+               return false;
+           });
+     </script> -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
