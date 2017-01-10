@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 class AppointmentForm(forms.Form):
 	time = forms.TimeField(required=False)
-	date = forms.DateField(widget=SelectDateWidget(years=range(datetime.date.today().year+100, datetime.date.today().year+100)), required=True)
+	date = forms.DateField(widget=SelectDateWidget(years=range(datetime.date.today().year, datetime.date.today().year+100)), required=True)
 	description = forms.CharField(widget=forms.Textarea, required=False)
 
 class AppointmentSearchForm(forms.Form):

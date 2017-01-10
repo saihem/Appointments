@@ -1,14 +1,10 @@
-<div class="jumbotron">
-        <h1>Theme example</h1>
-        <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it. </p>
-        {{ appointments }}
-      </div>
-       <form class="form-horizontal" method="post" name="add_appointment" action="{% url 'home' %}">
+
+       <form class="form-horizontal" method="post" name="add_appointment" action="{% url 'add' %}">
                 {% csrf_token %}
                 <p class="">* Denotes Required Field</p>
                 <input type="hidden" id="tags" value="tag1,tag2" style="width: 400px;">
 
-                {% for field in form %}
+                {% for field in add_form %}
                     <div class="control-group">
                         <label class="control-label ">{{ field.label }} </label>
                         <div class="controls">
@@ -24,6 +20,6 @@
                 <div style="clear: both;"></div>
 
                 <div class="form-actions">
-                    <button class="" type="submit" id="contact_link">Add Appointment</button>
+                    <button class="" name="add" type="submit" id="contact_link">Add Appointment</button>
                 </div>
-            </form>
+        </form>

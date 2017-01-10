@@ -1,12 +1,13 @@
 from django.conf.urls import include, url
+from appointments.views import MainView
 from appointments.views import AppointmentsView
 from appointments.views import AppointmentsSearchView
 
 
 urlpatterns = [
-    # Examples:
-    url(r'^$', AppointmentsView.as_view(), name='home'),
-    url(r'^search/', AppointmentsSearchView.as_view(), name='home'),
+    url(r'^$', MainView.as_view(), name='home'),
+    url(r'^add/', AppointmentsView.as_view(), name='add'),
+    url(r'^search/', AppointmentsSearchView.as_view(), name='search'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

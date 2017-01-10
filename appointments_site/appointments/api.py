@@ -13,10 +13,6 @@ class AppointmentsInstanceResource(object):
 		appointment.save()
 		return appointment
 
-	def _get(self, date):
-		if date:
-			return Appointment.objects.get(date=date)
-		return Appointment.objects.all()
 
 class AppointmentsListResource(object):
 	def _get(self, date):
@@ -26,8 +22,8 @@ class AppointmentsListResource(object):
 			print app.created_on, "created needs to be less than DATE", date,
 			print app.date
 			print app.description
-		print "END OF APP STUFF" ,len(appointments)
-		return appointments 
+		print "END OF APP STUFF" 
+		return appointments, appointments.count()
 	
 	def get_matching_appointments(self, query_dict):
 		query = query_dict['keyword'].strip()
