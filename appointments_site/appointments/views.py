@@ -24,26 +24,29 @@ import json
 import requests
 
 class MainView(TemplateView):
+    '''
+    renders forms and sends data to display search results
+    '''
     template_name = 'appointments.html'
 
     def get(self, request, *args, **kwargs):
         add_form = AppointmentForm(self.request.GET or None)
         search_form = AppointmentSearchForm(self.request.GET or None)
-        print request.GET.get('keyword', None)
         data = self.get_context_data(**kwargs)
         data['add_form'] = add_form
         data['search_form'] = search_form
-        data_requests = request.POST.copy()
-        keyword = data_requests.get('keyword', None)
-        print "AJAX", self.request.is_ajax(), keyword
+        ajax_request = request.GET.copy()
+        keyword = ajax_request.get('keyword', None)
+        print request.GET.get('keyword', None), "AJAX", self.request.is_ajax(), keyword
         if self.request.is_ajax():
             self.template_name = "search_results.html"
-            keyword = data_requests.get('keyword', None)
-            print "IN", keyword
+            keyword = ajax_request.get('keyword', None)
             if keyword:
                 appointments, count = AppointmentsListResource().get_matching_appointments(keyword)
             else:
-                appointments, count = ([], -1)
+                # Returns all appointments because keyword is None
+                today = datetime.datetime.today()
+                appointments, count = AppointmentsListResource()._get(today)
             print "stuff", appointments, count
             data['appointments'] = appointments
             data['count'] = count
@@ -56,6 +59,9 @@ def validate_keyword(request):
     return JsonResponse(data)
 
 class AppointmentsView(FormView):
+    '''
+    Add Appointments
+    '''
     template_name = "appointments.html"
     form_class = AppointmentForm
     success_url = '/'
@@ -68,12 +74,10 @@ class AppointmentsView(FormView):
         context = super(AppointmentsView, self).get_context_data(**kwargs)
         today = datetime.datetime.today()
         appointments, total_apps = AppointmentsListResource()._get(today)
-        print appointments
         context.update({'appointments': appointments, "total": total_apps})
         return context
 
     def form_valid(self, form):
         app_date = form.cleaned_data['date']
         AppointmentsInstanceResource()._post(form.cleaned_data)
-        print "SUCESSS"
         return HttpResponseRedirect('%s?success=1'% reverse('home'))

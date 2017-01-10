@@ -16,17 +16,13 @@ class AppointmentsInstanceResource(object):
 
 class AppointmentsListResource(object):
 	def _get(self, date):
-		print "DATE", date
+		'''
+			Gets appointments starting from the current day
+		'''
 		appointments = Appointment.objects.filter(Q(date__gte=date)).order_by('-created_on')
-		for app in appointments:
-			print app.created_on, "created needs to be less than DATE", date,
-			print app.date
-			print app.description
-		print "END OF APP STUFF" 
 		return appointments, appointments.count()
-	
-	def get_matching_appointments(self, query_dict):
-		query = query_dict['keyword'].strip()
+
+	def get_matching_appointments(self, query):
+		#query = query_dict['keyword'].strip()
 		results = Appointment.objects.filter(Q(date__icontains=query)| Q(time__icontains=query)| Q(description__icontains=query))
-		print "check results"* 5, results
 		return list(results), results.count()
